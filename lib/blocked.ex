@@ -1,20 +1,14 @@
 defmodule Blocked do
   defmacro by(issue_reference) do
-    issue_reference = Code.eval_quoted(issue_reference)
     do_by(issue_reference, nil, nil, nil)
   end
 
   defmacro by(issue_reference, kwargs) when is_list(kwargs) do
-    issue_reference = Code.eval_quoted(issue_reference)
-    kwars = Code.eval_quoted(kwargs)
-    do_by(issue_reference, nil, kwargs[:do], kwars[:else])
+    do_by(issue_reference, nil, kwargs[:do], kwargs[:else])
   end
 
   defmacro by(issue_reference, reason, kwargs \\ []) when is_list(kwargs) do
-    issue_reference = Code.eval_quoted(issue_reference)
-    reason = Code.eval_quoted(reason)
-    kwars = Code.eval_quoted(kwargs)
-    do_by(issue_reference, reason, kwars[:do], kwargs[:else])
+    do_by(issue_reference, reason, kwargs[:do], kwargs[:else])
   end
 
   defp do_by(issue_reference, reason, hotfix_body, resolved_body) do
@@ -58,7 +52,7 @@ defmodule Blocked do
   defp show_lookup_error_warning(issue_reference, reason, response_code, config) do
     warn("""
     Could not look up the blocking issue `#{issue_reference}`.
-    The lookup request returned the following HTTP status code: #{reason}.
+    The lookup request returned the following HTTP status code: #{response_code}.
 
     Please make sure that the issue reference is correct,
     `Blocked` has been configured properly,
@@ -68,7 +62,7 @@ defmodule Blocked do
 
   @doc false
   def warn(string) do
-    IO.warn("`Blocked.by`: " <> string <> "\n------------------------")
+    {:current_stacktrace, stacktrace} = Process.info(self(), :current_stacktrace)
+    IO.warn("`Blocked.by`: " <> string <> "\n------------------------", Enum.drop(stacktrace, 3))
   end
-
 end

@@ -1,8 +1,8 @@
 defmodule Blocked.Checker do
-  @issue ~r{#?(\d+)}
-  @repo_issue ~r{[\w-]+[#/]\d+}
-  @owner_repo_issue ~r{([\w-]+)/([\w-]+)[#/](\d+)}
-  @issue_url ~r{https?://github.com/([\w-]+)/([\w-]+)/issues/([\w-]+)[#/]\d+}
+  @issue ~r{#?(\d+)$}
+  @repo_issue ~r{([\w-]+)[#/](\d+)$}
+  @owner_repo_issue ~r{([\w-]+)/([\w-]+)[#/](\d+)$}
+  @issue_url ~r{https?://github.com/([\w-]+)/([\w-]+)/issues/[#/](\d+)}
   @remote_url ~r{(?:https://github.com/([\w-]+)/([\w-]+).git)|(?:git@github.com:([\w-]+)/([\w-]+).git)}
 
   defmodule IssueReference do
@@ -11,6 +11,7 @@ defmodule Blocked.Checker do
 
   def check(issue_reference, config) do
     with {:ok, info = %IssueReference{}} <- parse_issue_reference(issue_reference, config) do
+      IO.inspect(info)
       Blocked.Checker.Github.check(info.owner, info.repo, info.issue)
     end
   end
@@ -22,9 +23,11 @@ defmodule Blocked.Checker do
       {:error, :repo_info}
     else
       {:ok, result_url} ->
-        result_url
-        |> String.trim_trailing
-        |> parse_remote_url
+        {owner, repo} =
+          result_url
+          |> String.trim_trailing
+          |> parse_remote_url
+        {:ok, {owner, repo}}
     end
   end
 
@@ -52,6 +55,8 @@ defmodule Blocked.Checker do
         end
       [_, owner, repo, issue] ->
         {:ok, %IssueReference{owner: owner, repo: repo, issue: issue}}
+      other ->
+        {:error, :issue_parsing}
     end
   end
 end
