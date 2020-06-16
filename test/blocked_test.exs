@@ -4,9 +4,9 @@ defmodule BlockedTest do
   doctest Blocked
 
   describe "Macro usage" do
-    test "Integration test - happy path (requires an internet connection)" do
+    test "Integration test - happy path - issue still open (requires an internet connection)" do
       io = capture_io(:stderr, fn ->
-        defmodule ExampleHappy do
+        defmodule ExampleIssueOpen do
           def bar(x) do
             Blocked.by("elixir-blocked#1") do
               x * x
@@ -18,7 +18,50 @@ defmodule BlockedTest do
       assert(io == "")
     end
 
-    test "Integration test - sad path (requires an internet connection)" do
+    test "Integration test - happy path - issue closed (requires an internet connection)" do
+      io = capture_io(:stderr, fn ->
+        defmodule ExampleIssueClosed do
+          def bar(x) do
+            Blocked.by("elixir-blocked#2") do
+              x * x
+            end
+          end
+        end
+      end)
+
+      assert(io =~ """
+      \e[33mwarning: \e[0m`Blocked.by`: A blocking issue has been closed!
+      Issue: elixir-blocked#2
+
+      Closed at: 2020-06-16T21:07:41Z
+
+      ------------------------
+      """)
+    end
+
+    test "Integration test - happy path - issue closed (with reason) (requires an internet connection)" do
+      io = capture_io(:stderr, fn ->
+        defmodule ExampleIssueClosedWithReason do
+          def bar(x) do
+            Blocked.by("elixir-blocked#2", "We want to be able to do cool stuff!") do
+              x * x
+            end
+          end
+        end
+      end)
+
+      assert(io =~ """
+      \e[33mwarning: \e[0m`Blocked.by`: A blocking issue has been closed!
+      Issue: elixir-blocked#2
+      Reason for blocking: We want to be able to do cool stuff!
+      Closed at: 2020-06-16T21:07:41Z
+
+      ------------------------
+      """)
+    end
+
+
+    test "Integration test - sad path: non-existent issue (requires an internet connection)" do
       io = capture_io(:stderr, fn ->
         defmodule ExampleSad do
           def bar(x) do
@@ -37,6 +80,22 @@ defmodule BlockedTest do
       `Blocked` has been configured properly,
       and that you have a working internet connection.
 
+      ------------------------
+      """)
+    end
+
+    test "malformed issue reference" do
+      io = capture_io(:stderr, fn ->
+        defmodule ExampleMalformedIssueRef do
+          def bar(x) do
+            Blocked.by("this cannot be parsed") do
+              x * x
+            end
+          end
+        end
+      end)
+      assert(io =~ """
+      \e[33mwarning: \e[0m`Blocked.by`: Cannot parse issue reference `this cannot be parsed`
       ------------------------
       """)
     end
