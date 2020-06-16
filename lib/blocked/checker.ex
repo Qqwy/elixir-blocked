@@ -32,7 +32,7 @@ defmodule Blocked.Checker do
           result_url
           |> String.trim_trailing
           |> parse_remote_url
-        {:ok, {owner, repo}}
+        {:ok, {config.project_owner || owner, config.project_repo || repo}}
       end
     end
   end

@@ -31,4 +31,25 @@ defmodule Blocked.CheckerTest do
       assert {:ok, %IssueReference{owner: "Qqwy", repo: "elixir-blocked", issue: "42"}} = Blocked.Checker.parse_issue_reference("http://github.com/Qqwy/elixir-blocked/issues/42", config())
     end
   end
+
+  describe "get_current_repo_info/1" do
+    test "reads info from configuration if proper fields are provided" do
+      assert {:ok, {"JohnDoe", "example"}} = Blocked.Checker.get_current_repo_info(config())
+    end
+
+    test "reads info from local git repo configuration if one or both of the config fields are missing" do
+      config = config()
+      config = put_in(config.project_owner, nil)
+      assert {:ok, {"Qqwy", "example"}} = Blocked.Checker.get_current_repo_info(config)
+
+      config = config()
+      config = put_in(config.project_repo, nil)
+      assert {:ok, {"JohnDoe", "elixir-blocked"}} = Blocked.Checker.get_current_repo_info(config)
+
+      config = config()
+      config = put_in(config.project_repo, nil)
+      config = put_in(config.project_owner, nil)
+      assert {:ok, {"Qqwy", "elixir-blocked"}} = Blocked.Checker.get_current_repo_info(config)
+    end
+  end
 end
