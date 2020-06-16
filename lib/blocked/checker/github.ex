@@ -1,14 +1,14 @@
 defmodule Blocked.Checker.Github do
 
 
-  def run(owner_name, repo_name, issue_number) do
+  def check(owner_name, repo_name, issue_number) do
     case Tentacat.Issues.find(make_client(), owner_name, repo_name, issue_number) do
       {200, %{"closed_at" => nil}, _} ->
-        :issue_open
+        {:ok, :issue_open}
       {200, %{"closed_at" => datetime_str}, _} when is_binary(datetime_str) ->
-        {:issue_closed, datetime_str}
+        {:ok, {:issue_closed, datetime_str}}
       {response_code, _, _} ->
-        {:lookup_error, response_code}
+        {:error, {:lookup_error, response_code}}
     end
   end
 
