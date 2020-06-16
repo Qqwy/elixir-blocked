@@ -61,7 +61,7 @@ defmodule Blocked.Checker do
         end
       [_, owner, repo, issue] ->
         {:ok, %IssueReference{owner: owner, repo: repo, issue: issue}}
-      other ->
+      _other ->
         {:error, :issue_parsing}
     end
   end
