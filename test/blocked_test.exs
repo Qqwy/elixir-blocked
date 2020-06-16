@@ -10,9 +10,13 @@ defmodule BlockedTest do
           def bar(x) do
             Blocked.by("elixir-blocked#1") do
               x * x
+            else
+              x * x * x
             end
           end
         end
+
+        assert ExampleIssueOpen.bar(10) == 100
       end)
 
       assert(io == "")
@@ -24,9 +28,13 @@ defmodule BlockedTest do
           def bar(x) do
             Blocked.by("elixir-blocked#2") do
               x * x
+            else
+              x * x * x
             end
           end
         end
+
+        assert ExampleIssueClosed.bar(10) == 1000
       end)
 
       assert(io =~ """
@@ -37,6 +45,7 @@ defmodule BlockedTest do
 
       ------------------------
       """)
+
     end
 
     test "Integration test - happy path - issue closed (with reason) (requires an internet connection)" do
@@ -94,6 +103,7 @@ defmodule BlockedTest do
           end
         end
       end)
+
       assert(io =~ """
       \e[33mwarning: \e[0m`Blocked.by`: Cannot parse issue reference `this cannot be parsed`
       ------------------------

@@ -14,7 +14,7 @@ defmodule Blocked.Checker do
 
   def check(issue_reference, config) do
     with {:ok, info = %IssueReference{}} <- parse_issue_reference(issue_reference, config) do
-      Blocked.Checker.GithubBackend.check(info.owner, info.repo, info.issue)
+      Blocked.Checker.GithubBackend.check(info.owner, info.repo, info.issue, config)
     end
   end
 

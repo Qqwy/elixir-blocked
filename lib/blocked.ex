@@ -12,18 +12,20 @@ defmodule Blocked do
   end
 
   defp do_by(issue_reference, reason, hotfix_body, resolved_body) do
-    # TODO do not run if we should not check
-    config = Blocked.Config.load
-    case Blocked.Checker.check(issue_reference, config) do
-      {:ok, :issue_open} ->
-        hotfix_body
-      {:ok, {:issue_closed, closed_at}} ->
-        show_closed_warning(issue_reference, reason, closed_at, config)
-        hotfix_body || resolved_body
-      {:error, error_info} ->
-        show_check_error_warning(issue_reference, reason, error_info, config)
-        # show_lookup_error_warning(issue_reference, reason, status_code, config)
-        hotfix_body
+    config = Blocked.Config.load_with_defaults
+    if !config.warn do
+      hotfix_body
+    else
+      case Blocked.Checker.check(issue_reference, config) do
+        {:ok, :issue_open} ->
+          hotfix_body
+        {:ok, {:issue_closed, closed_at}} ->
+          show_closed_warning(issue_reference, reason, closed_at, config)
+          resolved_body || hotfix_body
+        {:error, error_info} ->
+          show_check_error_warning(issue_reference, reason, error_info, config)
+          hotfix_body
+      end
     end
   end
 
