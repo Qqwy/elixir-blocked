@@ -9,7 +9,7 @@
 
 ---
 
-Blocked was made to improve the quality of your project's code over time: It automates away the human task of whether certain hot-fixes, 'temporary patches' or 'duct-tape code' are still required. This makes it less scary to add a temporary workaround to your codebase, because you'll know the minute it is no longer necessary!
+Blocked was made to improve the quality of your project's code over time: It automates away the human task of checking whether certain hot-fixes, 'temporary patches' or 'duct-tape code' are still required. This makes it less scary to add a temporary workaround to your codebase, because you'll know the minute it is no longer necessary!
 
 
 Basic features:
