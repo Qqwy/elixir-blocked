@@ -1,11 +1,13 @@
+dist: bionic
 language: elixir
-elixir:
-  - '1.7'
-  - '1.8'
-  - '1.9'
-  - '1.10'
-otp_release:
-  - '20.0'
+matrix:
+  include:
+    - otp_release: 22.0
+      elixir: 1.9
+    - otp_release: 22.0
+      elixir: 1.10
+env:
+  - MIX_ENV=test
 after_script:
   - MIX_ENV=docs mix deps.get
   - MIX_ENV=docs mix inch.report
