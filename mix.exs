@@ -1,13 +1,18 @@
 defmodule Blocked.MixProject do
+  @source_url "https://github.com/Qqwy/elixir-blocked"
   use Mix.Project
 
   def project do
     [
       app: :blocked,
       version: "0.1.0",
-      elixir: "~> 1.10",
+      elixir: "~> 1.&",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      source_url: @source_url,
+      docs: docs()
     ]
   end
 
@@ -21,11 +26,35 @@ defmodule Blocked.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:git_cli, "~> 0.3"},
 	    {:tentacat, "~> 2.0"},
-      {:specify, "~> 0.7.0"}
+      {:specify, "~> 0.7.0"},
+      {:ex_doc, "~> 0.19", only: [:dev], runtime: false},
+    ]
+  end
+
+  defp description do
+    """
+    Keep track of when hotfixes can be removed by showing compile-time warnings when issues are closed.
+    """
+  end
+
+  defp package do
+    # These are the default files included in the package
+    [
+      name: :blocked,
+      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      maintainers: ["Wiebe-Marten Wijnja/Qqwy"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      logo: "media/logo-thicklines-25percent.png",
+      extras: ["README.md"]
     ]
   end
 end
