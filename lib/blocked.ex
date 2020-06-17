@@ -8,17 +8,43 @@ defmodule Blocked do
 
   #### Example:
 
-      defmodule Foo do
+
+      defmodule Example do
         require Blocked
 
-        def y_plus_x_squared(y, x) do
-          Blocked.by("some-repo/10", "Until a `pow` function exists, fall back to multiplication.") do
-            y + (x * x)
-          else
-            y + pow(x, 2)
+        def main do
+          IO.puts("Hello, world!")
+          Blocked.by("#42", "This code can be removed when the issue is closed") do
+            hacky_workaround()
           end
+
+          # The reason is optional
+          Blocked.by("#69") do
+            a_quick_fix()
+          end
+
+          # It is possible to indicate
+          # the desired 'ideal' code as well, by passing an `else` block:
+          Blocked.by("#1337") do
+            ugly_fallback()
+          else
+            beautiful_progress()
+          end
+
+          # If the blockage is more general, you can also leave out the `do` block.
+          Blocked.by("#65535", "This whole module can be rewritten once we're on the new Elixir version!")
+
+          # Blocked supports many ways of referring to an issue
+          Blocked.by("#13")
+          Blocked.by("elixir#13")
+          Blocked.by("elixir/13")
+          Blocked.by("elixir-lang/elixir#13")
+          Blocked.by("elixir-lang/elixir/13")
+          Blocked.by("https://github.com/elixir-lang/elixir/issues/13")
         end
       end
+
+
 
   ## When will `Blocked.by/3` run?
 

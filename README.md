@@ -46,6 +46,8 @@ Documentation can be found at [https://hexdocs.pm/blocked](https://hexdocs.pm/bl
 
 ```elixir
 defmodule Example do
+  require Blocked
+
   def main do
     IO.puts("Hello, world!")
     Blocked.by("#42", "This code can be removed when the issue is closed") do
