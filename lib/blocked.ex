@@ -95,9 +95,9 @@ defmodule Blocked do
         end
       end
   """
-  @type code :: any
-  @type do_block :: code
-  @type else_block :: code
+  @typep code :: any
+  @typep do_block :: code
+  @typep else_block :: code
   @spec by(binary(), binary() | nil, [] | [do: do_block] | [do: do_block, else: do_block]) :: do_block | else_block
   defmacro by(issue_reference, reason \\ nil, code_blocks \\ [])
 
