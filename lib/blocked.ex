@@ -95,10 +95,7 @@ defmodule Blocked do
         end
       end
   """
-  @type code :: any
-  @type do_block :: code
-  @type else_block :: code
-  @spec by(binary(), binary() | nil, [] | [do: do_block] | [do: do_block, else: do_block]) :: do_block | else_block
+  @spec by(binary(), binary() | nil, [] | [do: do_block] | [do: do_block, else: do_block]) :: (do_block | else_block) when do_block: any, else_block: any
   defmacro by(issue_reference, reason \\ nil, code_blocks \\ [])
 
   # Runs when no reason is passed:
