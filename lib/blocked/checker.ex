@@ -1,7 +1,6 @@
 defmodule Blocked.Checker do
   @moduledoc false
 
-
   @issue ~r{^#?(\d+)$}
   @repo_issue ~r{^([\w-]+)[#/](\d+)$}
   @owner_repo_issue ~r{^([\w-]+)/([\w-]+)[#/](\d+)$}
