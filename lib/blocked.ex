@@ -12,7 +12,7 @@ defmodule Blocked do
   end
 
   defp do_by(issue_reference, reason, hotfix_body, resolved_body) do
-    config = Blocked.Config.load_with_defaults
+    config = cached_load_config()
     if !config.warn do
       hotfix_body
     else
@@ -29,7 +29,18 @@ defmodule Blocked do
     end
   end
 
-  defp show_closed_warning(issue_reference, reason, closed_at, config) do
+  defp cached_load_config do
+    case Process.get({__MODULE__, :config}) do
+      config = %Blocked.Config{} ->
+        config
+      nil ->
+        config = Blocked.Config.load_with_defaults
+        Process.put({__MODULE__, :config}, config)
+        config
+    end
+  end
+
+  defp show_closed_warning(issue_reference, reason, closed_at, _config) do
     reason_str = if reason do "Reason for blocking: #{reason}" else "" end
     warn("""
     A blocking issue has been closed!
@@ -51,7 +62,7 @@ defmodule Blocked do
     end
   end
 
-  defp show_lookup_error_warning(issue_reference, reason, response_code, config) do
+  defp show_lookup_error_warning(issue_reference, _reason, response_code, _config) do
     warn("""
     Could not look up the blocking issue `#{issue_reference}`.
     The lookup request returned the following HTTP status code: #{response_code}.
