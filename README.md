@@ -93,7 +93,7 @@ If your setup is different, you can configure the repository and owner name by s
 
 PR's are very much accepted!
 
-- Maybe at some point support GitLab or other repository-hosts as well?
+- Maybe at some point support GitLab, Bitbucket or other repository-hosts as well?
 
 # Attribution
 
