@@ -6,19 +6,21 @@ defmodule Blocked do
   2. Write `Blocked.by(issue_reference, reason, do: ..., else: ...)` wherever you have to apply a temporary fix.
 
 
+  #### Example:
+
       defmodule Foo do
         require Blocked
 
-        def calc(x) do
+        def y_plus_x_squared(y, x) do
           Blocked.by("some-repo/10", "Until a `pow` function exists, fall back to multiplication.") do
-            x * x
+            y + (x * x)
           else
-            pow(x, 2)
+            y + pow(x, 2)
           end
         end
       end
 
-  ## When will `Blocked.by` run?
+  ## When will `Blocked.by/3` run?
 
   By default, the checks will only be performed inside Continuous Integration environments.
   (That is, any place where `System.get_env("CI")` is set).
@@ -55,18 +57,32 @@ defmodule Blocked do
 
   This warning will contain the optional `reason`.
 
-  When the issue is open, will expand to the (optional) `do: ...` block.
-  This block can be used to indicate the code that is a 'temporary hotfix'.
 
-  When the issue is closed, will expand to the (optional) `else: ...` block.
-  This block can be used to indicate the desired ideal code that could be used
+  ## General usage
+
+      Blocked.by(issue_reference, reason) do
+        # hotfix code here
+        # ...
+      else
+        # ideal code here
+        # ...
+      end
+
+  When the issue is open, will expand to the hotfix code in the `do: ...` block.
+  This block can be used to indicate the code that is a 'temporary hotfix'.
+  This block is optional (but recommended).
+
+  When the issue is closed, will expand to the ideal code in the `else: ...` block.
+  This block can be used to indicate the desired code that could be used
   once the hotfix is no longer necessary.
+  This block is optional.
 
   If no `else: ...` is passed, we'll still expand to the `do: ...` block
   (since the hotfix should in that case work).
 
   See the module-documentation for more information on what format issue-references
   are supported, and on when `Blocked.by` is (and is not) run.
+
 
   ## Examples
 
@@ -82,15 +98,16 @@ defmodule Blocked do
       Blocked.by("some-repo/10", "We need a special fetching function to support this.")
 
    Issue-reference, wrapping code
+   (This is the recommended usage.)
 
       defmodule Foo do
         require Blocked
 
-        def calc(x) do
+        def y_plus_x_squared(y, x) do
         Blocked.by("some-repo/10", "Until a `pow` function exists, fall back to multiplication.") do
-            x * x
+            y + (x * x)
           else
-            pow(x, 2)
+            y + pow(x, 2)
           end
         end
       end
