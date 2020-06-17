@@ -30,6 +30,8 @@ defmodule Blocked.MixProject do
 	    {:tentacat, "~> 2.0"},
       {:specify, "~> 0.7.0"},
       {:ex_doc, "~> 0.19", only: [:dev], runtime: false},
+      # Inch CI documentation quality test.
+      {:inch_ex, ">= 0.0.0", only: [:dev]},
     ]
   end
 
