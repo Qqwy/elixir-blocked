@@ -1,4 +1,6 @@
 defmodule Blocked.Checker.GithubBackend do
+  @moduledoc false
+
   def check(owner_name, repo_name, issue_number, config) do
     case Tentacat.Issues.find(make_client(config), owner_name, repo_name, issue_number) do
       {200, %{"closed_at" => nil}, _} ->

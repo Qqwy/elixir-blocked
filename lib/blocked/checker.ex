@@ -9,6 +9,7 @@ defmodule Blocked.Checker do
   @remote_url ~r{(?:https://github.com/([\w-]+)/([\w-]+).git)|(?:git@github.com:([\w-]+)/([\w-]+).git)}
 
   defmodule IssueReference do
+    @moduledoc false
     defstruct [:owner, :repo, :issue]
   end
 

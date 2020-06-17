@@ -6,7 +6,7 @@ defmodule Blocked.MixProject do
     [
       app: :blocked,
       version: "0.1.0",
-      elixir: "~> 1.&",
+      elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
@@ -53,7 +53,7 @@ defmodule Blocked.MixProject do
   defp docs do
     [
       main: "readme",
-      logo: "media/logo-thicklines-25percent.png",
+      logo: "media/blocked_logo.svg",
       extras: ["README.md"]
     ]
   end
