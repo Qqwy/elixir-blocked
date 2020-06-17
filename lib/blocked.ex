@@ -1,13 +1,17 @@
 defmodule Blocked do
   defmacro by(issue_reference) do
+    issue_reference = compile_time_eval(issue_reference, __CALLER__)
     do_by(issue_reference, nil, nil, nil)
   end
 
   defmacro by(issue_reference, kwargs) when is_list(kwargs) do
+    issue_reference = compile_time_eval(issue_reference, __CALLER__)
     do_by(issue_reference, nil, kwargs[:do], kwargs[:else])
   end
 
   defmacro by(issue_reference, reason, kwargs \\ []) when is_list(kwargs) do
+    issue_reference = compile_time_eval(issue_reference, __CALLER__)
+    reason = compile_time_eval(reason, __CALLER__)
     do_by(issue_reference, reason, kwargs[:do], kwargs[:else])
   end
 
@@ -29,6 +33,9 @@ defmodule Blocked do
     end
   end
 
+  # Cache configuration in the (compiling) process' dictionary
+  # to keep compilation fast, especially when _not_ performing remote requests
+  # (i.e. when config.warn is `false`).
   defp cached_load_config do
     case Process.get({__MODULE__, :config}) do
       config = %Blocked.Config{} ->
@@ -38,6 +45,18 @@ defmodule Blocked do
         Process.put({__MODULE__, :config}, config)
         config
     end
+  end
+
+  # In general `eval_quoted` is bad to be used.
+  # In this case we need it however,
+  # because we want to inspect the issue-reference string
+  # and reason string
+  # at compile-time
+  # (regardless of whether they were e.g. passed as hard-coded string
+  # or e.g. inside a module-attribute)
+  defp compile_time_eval(quoted, env) do
+    {result, []} = Code.eval_quoted(quoted, [], env)
+    result
   end
 
   defp show_closed_warning(issue_reference, reason, closed_at, _config) do

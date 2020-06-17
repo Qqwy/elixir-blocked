@@ -110,4 +110,20 @@ defmodule BlockedTest do
       """)
     end
   end
+
+  describe "non-hard-coded strings passed to `Blocked.by`" do
+    test "module attribute" do
+      io = capture_io(:stderr, fn ->
+        defmodule ExampleModuleAttribute do
+          @issue_ref "elixir-blocked#1"
+          def bar(x) do
+            Blocked.by(@issue_ref) do
+              x * x
+            end
+          end
+        end
+      end)
+      assert(io == "")
+    end
+  end
 end
