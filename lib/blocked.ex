@@ -1,14 +1,121 @@
 defmodule Blocked do
+  @moduledoc """
+  ## Usage
+
+  1. Put `require Blocked` in your module to be able to use the exposed macro.
+  2. Write `Blocked.by(issue_reference, reason, do: ..., else: ...)` wherever you have to apply a temporary fix.
+
+
+  `require Blocked`
+
+      defmodule Foo do
+        require Blocked
+
+        def calc(x) do
+          Blocked.by("some-repo/10", "Until a `pow` function is implemented in the dependency, fall back to squaring by multiplication.") do
+            x * x
+          else
+            pow(x, 2)
+          end
+        end
+      end
+
+  ## When will `Blocked.by` run?
+
+  By default, the checks will only be performed inside Continuous Integration environments.
+  (That is, any place where `System.get_env("CI")` is set).
+  The reason for this default is that the checks perform HTTP requests to the GitHub-API,
+  which will slow down compilation somewhat.
+
+  This can be overridden by altering the `warn`-field in the `Blocked.Config` for a particular environment.
+
+  ## What if I have a private GitHub-repository?
+
+  By default, `Blocked` will run with an unauthenticated GitHub-client.
+  You can configure the client by specifying an API token
+  (of an account that has access to the repository in question)
+  in the `Blocked.Config`.
+  """
+
+
+  @doc """
+  Prints a compile-time warning whenever the GitHub issue `issue_reference` is closed.
+
+  This warning will contain the optional `reason`.
+
+  When the issue is open, will expand to the (optional) `do: ...` block.
+  This block can be used to indicate the code that is a 'temporary hotfix'.
+
+  When the issue is closed, will expand to the (optional) `else: ...` block.
+  This block can be used to indicate the desired ideal code that could be used
+  once the hotfix is no longer necessary.
+
+  If no `else: ...` is passed, we'll still expand to the `do: ...` block
+  (since the hotfix should in that case work).
+
+  ## Examples
+
+  ### Only issue-reference
+
+      Blocked.by("some-repo/10")
+
+      Blocked.by("some-other-repo#10")
+
+
+  ### Issue-reference and reason
+
+      Blocked.by("some-repo/10", "We need a special fetching function to support this.")
+
+  ### Issue-reference, wrapping code
+
+      defmodule Foo do
+        require Blocked
+
+        def calc(x) do
+          Blocked.by("some-repo/10", "Until a `pow` function is implemented in the remote project, fall back to squaring by multiplication.") do
+            x * x
+          else
+            pow(x, 2)
+          end
+        end
+      end
+
+
+  ## Supported Issue Reference patterns
+
+  1. `123` or `#123`: issue number. Assumes that the isue is part of the current repository.
+  2. `reponame/123` or `reponame#123`: repository + issue number. Assumes that the repository is part of the same owner/organization as the current repository.
+  3. `owner/reponame/123` or `owner/reponame#123`: owner/organization name + repository + issue number.
+  4. `https://github.com/owner/reponame/issues/123`: Full-blown URL to the page of the issue.
+
+  ## Automatic Repo Detection
+
+  We use the `git remote get-url` command to check for the remote URL of the current repository and attempt to extract the owner/organization and repository name from that.
+  We check against the `upstream` remote (useful in a forked project), falling back to the `origin` remote.
+
+  If your setup is different, you can configure the repository and owner name by specifying custom settings in the `Blocked.Config`.
+  """
   defmacro by(issue_reference) do
     issue_reference = compile_time_eval(issue_reference, __CALLER__)
     do_by(issue_reference, nil, nil, nil)
   end
 
+  @doc """
+  A version of `Blocked.by` with only an issue reference and a reason,
+  that does not wrap any code.
+
+  ## Examples
+
+
+  """
   defmacro by(issue_reference, kwargs) when is_list(kwargs) do
     issue_reference = compile_time_eval(issue_reference, __CALLER__)
     do_by(issue_reference, nil, kwargs[:do], kwargs[:else])
   end
 
+  @doc """
+
+  """
   defmacro by(issue_reference, reason, kwargs \\ []) when is_list(kwargs) do
     issue_reference = compile_time_eval(issue_reference, __CALLER__)
     reason = compile_time_eval(reason, __CALLER__)

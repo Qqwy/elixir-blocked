@@ -1,4 +1,18 @@
 defmodule Blocked.Config do
+  @moduledoc """
+  Configuration for `Blocked`.
+
+  The simplest ways to configure `Blocked` is by:
+
+  - adding `config :blocked. [warn: true, project_owner: "YourName"]` to your Elixir configuration file.
+    (for older Elixir versions, this is `Mix.Config`; for newer versions, `Config`.)
+  - alternatively, adding system-environment-variables like `BLOCKED_WARN=true`, `BLOCKED_PROJECT_OWNER="YourName"` etc. to the environment you want to run `Blocked` in.
+
+  If you want to check the configuration in the current environment,
+  print the output of `Blocked.Config.load_with_defaults`.
+
+  More advanced configuration set-ups are possible by using the advanced features of `Specify`.
+  """
   require Specify
   Specify.defconfig(sources: [%Specify.Provider.MixEnv{application: :blocked}, %Specify.Provider.SystemEnv{prefix: "BLOCKED", optional: true}]) do
     @doc """
