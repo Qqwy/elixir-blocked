@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/Qqwy/elixir_specify/master/media/blocked_logo_text_flat.svg)
+![](https://github.com/Qqwy/elixir-blocked/blob/master/media/blocked_logo_text_flat.svg)
 
 `Blocked` is an Elixir-library that helps you to keep track of when hotfixes can be removed by showing compile-time warnings when issues (in your project repository or any other source-code GitHub repository) are closed.
 
