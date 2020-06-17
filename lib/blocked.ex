@@ -15,7 +15,10 @@ defmodule Blocked do
     do_by(issue_reference, reason, kwargs[:do], kwargs[:else])
   end
 
-  defp do_by(issue_reference, reason, hotfix_body, resolved_body) do
+  defp do_by(issue_reference, reason, hotfix_body, resolved_body)
+    when is_binary(issue_reference)
+    and  (reason == nil or is_binary(reason))
+    do
     config = cached_load_config()
     if !config.warn do
       hotfix_body
@@ -32,6 +35,14 @@ defmodule Blocked do
       end
     end
   end
+
+    defp do_by(issue_reference, reason, _hotfix_body, _resolved_body) do
+      raise(ArgumentError, """
+      Improper usage of `Blocked.by`.
+      Cannot parse issue_reference `#{inspect(issue_reference)}`
+      and/or reason `#{inspect(reason)}`
+      """)
+    end
 
   # Cache configuration in the (compiling) process' dictionary
   # to keep compilation fast, especially when _not_ performing remote requests

@@ -109,6 +109,19 @@ defmodule BlockedTest do
       ------------------------
       """)
     end
+
+
+    test "Passing garbage to `Blocked.by` raises an ArgumentError at compile-time" do
+      assert_raise(ArgumentError, fn ->
+        defmodule ExampleImproperIssueRefType do
+          def bar(x) do
+            Blocked.by(42) do
+              x * x
+            end
+          end
+        end
+      end)
+    end
   end
 
   describe "non-hard-coded strings passed to `Blocked.by`" do
@@ -126,4 +139,5 @@ defmodule BlockedTest do
       assert(io == "")
     end
   end
+
 end
