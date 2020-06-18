@@ -17,15 +17,10 @@ defmodule Blocked.Checker.GithubBackend do
     use Tesla
     adapter Tesla.Adapter.Mint
 
-    # plug Tesla.Middleware.BaseUrl, "https://api.github.com"
-    # # plug Tesla.Middleware.Headers, [{"authorization", "token xyz"}]
-    # plug Tesla.Middleware.JSON
-    
     def issue_info(owner_name, repo_name, issue_number, config) do
       get(client(config), "/repos/#{owner_name}/#{repo_name}/issues/#{issue_number}")
     end
 
-    # build dynamic client based on runtime arguments
     def client(config) do
       middleware = [
         {Tesla.Middleware.BaseUrl, "https://api.github.com"},
