@@ -25,7 +25,7 @@ defmodule Blocked.Checker.GithubBackend do
       middleware = [
         {Tesla.Middleware.BaseUrl, "https://api.github.com"},
         Tesla.Middleware.JSON,
-        {Tesla.Middleware.Headers, [["User-Agent", "elixir-blocked"]]}
+        {Tesla.Middleware.Headers, [{"User-Agent", "elixir-blocked"}]}
       ] ++ if config.github_api_token do
         [{Tesla.Middleware.Headers, [{"authorization", "token: " <> config.github_api_token }]}]
       else
