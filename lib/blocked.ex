@@ -194,7 +194,7 @@ defmodule Blocked do
         config
       nil ->
         config = Blocked.Config.load_with_defaults
-        :application.ensure_all_started(:httpoison) # Required since we need HTTP-related applications to be started at compile-time
+        :application.ensure_all_started(:tesla) # Required since we need HTTP-related applications to be started at compile-time
         Process.put({__MODULE__, :config}, config)
         config
     end
