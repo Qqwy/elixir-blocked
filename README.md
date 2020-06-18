@@ -81,6 +81,10 @@ defmodule Example do
 end
 ```
 
+As example, a warning that might be generated once an issue is closeed looks like this:
+
+![](https://github.com/Qqwy/elixir-blocked/blob/master/media/example_warning.png)
+
 ## When will `Blocked.by` run?
 
 By default, the checks will only be performed inside Continuous Integration environments.
