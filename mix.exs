@@ -5,7 +5,7 @@ defmodule Blocked.MixProject do
   def project do
     [
       app: :blocked,
-      version: "0.9.1",
+      version: "0.10.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
