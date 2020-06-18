@@ -8,11 +8,12 @@ matrix:
       elixir: 1.10
 before_script:
   - MIX_ENV=test mix deps.compile
+  - MIX_ENV=docs mix do deps.get, deps.compile
+
 script:
   - MIX_ENV=test mix do compile --warnings-as-errors, test
 
 after_script:
-  - MIX_ENV=docs mix deps.get
   - MIX_ENV=docs mix inch.report
 
 cache:
