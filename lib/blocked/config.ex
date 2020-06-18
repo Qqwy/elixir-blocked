@@ -14,7 +14,7 @@ defmodule Blocked.Config do
   More advanced configuration set-ups are possible by using the advanced features of `Specify`.
   """
   require Specify
-  Specify.defconfig(sources: [%Specify.Provider.MixEnv{application: :blocked}, %Specify.Provider.SystemEnv{prefix: "BLOCKED", optional: true}]) do
+  Specify.defconfig(sources: [%Specify.Provider.MixEnv{application: :blocked, optional: true}, %Specify.Provider.SystemEnv{prefix: "BLOCKED", optional: true}]) do
     @doc """
     trigger warnings in this particular environment.
 
