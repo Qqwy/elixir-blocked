@@ -6,6 +6,8 @@ matrix:
       elixir: 1.9
     - otp_release: 22.0
       elixir: 1.10
+before_script:
+  - MIX_ENV=test mix deps.compile
 script:
   - MIX_ENV=test mix do compile --warnings-as-errors, test
 
