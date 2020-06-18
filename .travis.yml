@@ -7,7 +7,7 @@ matrix:
     - otp_release: 22.0
       elixir: 1.10
 before_script:
-  - MIX_ENV=test mix deps.compile
+  - MIX_ENV=test mix do deps.get, deps.compile
   - MIX_ENV=docs mix do deps.get, deps.compile
 
 script:
