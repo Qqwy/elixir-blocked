@@ -177,7 +177,7 @@ defmodule Blocked do
     end
   end
 
-  defp do_by(issue_reference, reason, _hotfix_body, _resolved_body, env) do
+  defp do_by(issue_reference, reason, _hotfix_body, _resolved_body, _env) do
     raise(ArgumentError, """
     Improper usage of `Blocked.by`.
     Cannot parse issue_reference `#{inspect(issue_reference)}`
