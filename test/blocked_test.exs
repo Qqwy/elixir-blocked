@@ -139,5 +139,4 @@ defmodule BlockedTest do
       assert(io == "")
     end
   end
-
 end
