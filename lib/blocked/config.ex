@@ -47,6 +47,8 @@ defmodule Blocked.Config do
     This needs to be set if (and only if) you have a private GitHub-project,
     because otherwise we cannot access its issues.
 
+    The personal API token requires "repo" access.
+
     c.f. https://github.blog/2013-05-16-personal-api-tokens/
     """
     field :github_api_token, :term, default: nil
