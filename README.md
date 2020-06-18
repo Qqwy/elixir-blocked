@@ -113,6 +113,7 @@ If your setup is different, you can configure the repository and owner name by s
 
 # Changelog
 
+- 0.9.1 - Fixes bug where HTTP was not always available at compile-time and improves stacktrace information.
 - 0.9.0 - Initial publicly-released version
 
 # Roadmap & nice-to-haves
