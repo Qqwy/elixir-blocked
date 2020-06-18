@@ -5,7 +5,7 @@ defmodule Blocked.MixProject do
   def project do
     [
       app: :blocked,
-      version: "0.9.1",
+      version: "0.10.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -27,11 +27,14 @@ defmodule Blocked.MixProject do
   defp deps do
     [
       {:git_cli, "~> 0.3"},
-	    {:tentacat, "~> 2.0"},
+      {:tesla, "~> 1.3.0"},
+      {:mint, "~> 1.0"},
+      {:castore, "~> 0.1"},
+      {:jason, ">= 1.0.0"},
       {:specify, "~> 0.7.0"},
       {:ex_doc, "~> 0.19", only: [:docs], runtime: false},
       # Inch CI documentation quality test.
-      {:inch_ex, ">= 0.0.0", only: [:docs]},
+      {:inch_ex, ">= 0.0.0", only: [:docs], runtime: false},
     ]
   end
 

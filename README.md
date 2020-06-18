@@ -117,6 +117,7 @@ If your setup is different, you can configure the repository and owner name by s
 
 # Changelog
 
+- 0.10.0 - Replaces `Tentacat` as dependency in favour of calling the GitHub-API ourselves using `Tesla`+`Mint`+`Jason` which cuts the dependencies of `Blocked` more than in half.
 - 0.9.1 - Fixes bug where HTTP was not always available at compile-time and improves stacktrace information.
 - 0.9.0 - Initial publicly-released version
 
