@@ -29,7 +29,7 @@ by adding `blocked` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:blocked, "~> 0.9.0"}
+    {:blocked, "~> 0.10.0"}
   ]
 end
 ```
