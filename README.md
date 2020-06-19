@@ -29,7 +29,7 @@ by adding `blocked` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:blocked, "~> 0.10.0"}
+    {:blocked, "~> 0.9.0"}
   ]
 end
 ```
@@ -117,7 +117,6 @@ If your setup is different, you can configure the repository and owner name by s
 
 # Changelog
 
-- 0.10.0 - Replaces `Tentacat` as dependency in favour of calling the GitHub-API ourselves using `Tesla`+`Mint`+`Jason` which cuts the dependencies of `Blocked` more than in half.
 - 0.9.1 - Fixes bug where HTTP was not always available at compile-time and improves stacktrace information.
 - 0.9.0 - Initial publicly-released version
 
@@ -130,6 +129,10 @@ PR's are very much accepted!
 # Attribution
 
 This library is inspired and borrows heavily from the [Rust library of the same name](https://github.com/zacps/blocked).
+
+# See Also
+
+-[fixme-elixir](https://github.com/henrik/fixme-elixir) which triggers afer a certain point in time, rather than when an issue is closed.
 
 # Is it any good?
 
