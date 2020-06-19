@@ -132,7 +132,7 @@ This library is inspired and borrows heavily from the [Rust library of the same 
 
 # See Also
 
--[fixme-elixir](https://github.com/henrik/fixme-elixir) which triggers afer a certain point in time, rather than when an issue is closed.
+- [fixme-elixir](https://github.com/henrik/fixme-elixir) which triggers afer a certain point in time, rather than when an issue is closed.
 
 # Is it any good?
 
